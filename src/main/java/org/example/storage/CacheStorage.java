@@ -19,9 +19,9 @@ public class CacheStorage<K, V> {
             String combination = this.strategy.name() + "-" + this.location.name();
             switch (combination) {
                 case "LFU-RAM":
-                    return new CacheStorageLFURAM<K,V>();
+                    return new CacheStorageLFURAM<K, V>();
                 case "LFU-HDD":
-                    return new CacheStorageLFUHDD<K,V>();
+                    return new CacheStorageLFUHDD<K, V>();
             }
             throw new IllegalStateException(
                     "Unsupported combination : " + this.strategy + ", " + this.location);
