@@ -4,46 +4,27 @@ import org.example.storage.lfu.CacheStorageLFUHDD;
 import org.example.storage.lfu.CacheStorageLFURAM;
 import org.example.storage.params.CacheStorageLocation;
 import org.example.storage.params.CacheStorageStrategy;
+import lombok.Builder;
 
-
-public class CacheStorage {
+@Builder
+public class CacheStorage<K, V> {
     CacheStorageStrategy strategy;
     CacheStorageLocation location;
 
-    public static CacheStorageBuilder builder() {
-        return new CacheStorageBuilder();
-    }
-
-    public static class CacheStorageBuilder {
-        private CacheStorageStrategy strategy;
-        private CacheStorageLocation location;
-
-        public CacheStorageBuilder strategy(CacheStorageStrategy strategy) {
-            this.strategy = strategy;
-            return this;
-        }
-
-        public CacheStorageBuilder location(CacheStorageLocation location) {
-            this.location = location;
-            return this;
-        }
-
-        public CacheStorageInterface build() {
-
-            if (this.strategy == null || this.location == null) {
+    public static class CacheStorageBuilder<K, V> {
+        public CacheStorageInterface<K, V> build() {
+            if (strategy == null || location == null) {
                 throw new IllegalStateException("Strategy and location must be set");
             }
-
-            if (this.strategy == CacheStorageStrategy.LFU) {
-                if (this.location == CacheStorageLocation.RAM) {
-                    return new CacheStorageLFURAM<>();
-                } else {
-                    return new CacheStorageLFUHDD<>();
-                }
+            String combination = this.strategy.name() + "-" + this.location.name();
+            switch (combination) {
+                case "LFU-RAM":
+                    return new CacheStorageLFURAM<K,V>();
+                case "LFU-HDD":
+                    return new CacheStorageLFUHDD<K,V>();
             }
             throw new IllegalStateException(
-                    "Unsupported combination of strategy and location: "
-                    + this.strategy + ", " + this.location);
+                    "Unsupported combination : " + this.strategy + ", " + this.location);
         }
     }
 }
