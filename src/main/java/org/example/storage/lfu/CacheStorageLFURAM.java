@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class CacheStorageLFURAM<K, V> implements CacheStorageInterface<K, V> {
 
-    final private int maxSize = 10;
-    final private Map<K, Unit<V>> data = new HashMap<>();
+    private final int maxSize = 10;
+    private final Map<K, LFUUnit<V>> data = new HashMap<>();
 
     @Override
     public void put(K key, V value) {
@@ -19,12 +19,12 @@ public class CacheStorageLFURAM<K, V> implements CacheStorageInterface<K, V> {
                     .map(Map.Entry::getKey)
                     .ifPresent(this.data::remove);
         }
-        this.data.put(key, this.data.getOrDefault(key, Unit.<V>builder().value(value).count(0).build()));
+        this.data.put(key, this.data.getOrDefault(key, LFUUnit.<V>builder().value(value).count(0).build()));
     }
 
     @Override
     public V get(K key) {
-        Unit<V> result = this.data.get(key);
+        LFUUnit<V> result = this.data.get(key);
         if (result != null) {
             result.setCount(result.getCount() + 1);
             return result.getValue();

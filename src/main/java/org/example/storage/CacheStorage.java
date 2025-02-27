@@ -16,15 +16,13 @@ public class CacheStorage<K, V> {
             if (strategy == null || location == null) {
                 throw new IllegalStateException("Strategy and location must be set");
             }
-            String combination = this.strategy.name() + "-" + this.location.name();
-            switch (combination) {
-                case "LFU-RAM":
-                    return new CacheStorageLFURAM<K, V>();
-                case "LFU-HDD":
-                    return new CacheStorageLFUHDD<K, V>();
+            if (strategy == CacheStorageStrategy.LFU && location == CacheStorageLocation.RAM) {
+                return new CacheStorageLFURAM<K, V>();
             }
-            throw new IllegalStateException(
-                    "Unsupported combination : " + this.strategy + ", " + this.location);
+            if (strategy == CacheStorageStrategy.LFU && location == CacheStorageLocation.HDD) {
+                return new CacheStorageLFUHDD<K, V>();
+            }
+            throw new IllegalStateException("Unsupported combination : " + this.strategy + ", " + this.location);
         }
     }
 }
