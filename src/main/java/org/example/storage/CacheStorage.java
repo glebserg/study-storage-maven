@@ -13,18 +13,14 @@ public class CacheStorage<K, V> {
 
     public static class CacheStorageBuilder<K, V> {
         public CacheStorageInterface<K, V> build() {
-            if (strategy == null || location == null) {
-                throw new IllegalStateException("Strategy and location must be set");
-            }
-            String combination = this.strategy.name() + "-" + this.location.name();
-            switch (combination) {
-                case "LFU-RAM":
-                    return new CacheStorageLFURAM<K,V>();
-                case "LFU-HDD":
-                    return new CacheStorageLFUHDD<K,V>();
-            }
-            throw new IllegalStateException(
-                    "Unsupported combination : " + this.strategy + ", " + this.location);
+            return switch (strategy) {
+                case LFU -> switch (location) {
+                    case RAM -> new CacheStorageLFURAM<K, V>();
+                    case HDD -> new CacheStorageLFUHDD<K, V>();
+                    default -> throw new IllegalStateException("Unsupported location: " + location);
+                };
+                default -> throw new IllegalStateException("Unsupported strategy: " + strategy);
+            };
         }
     }
 }
