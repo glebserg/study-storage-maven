@@ -28,8 +28,8 @@ class CacheStorageLFUHDDTests {
             cache.put("key" + i, "value" + i);
         }
         assertEquals(10, cache.getKeys().size());
-        assertNull(cache.get("key0")); // key0 должен быть удален
-        assertNotNull(cache.get("key14")); // key14 должен остаться
+        assertNull(cache.get("key0"));
+        assertNotNull(cache.get("key14"));
     }
 
     @Test
