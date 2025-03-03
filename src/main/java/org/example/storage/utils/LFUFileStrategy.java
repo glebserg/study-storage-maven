@@ -24,12 +24,23 @@ public class LFUFileStrategy<K, V> {
         fileOutputStream.write(rawData);
     }
 
+    private byte[] convertToByteArray(Map<K, LFUUnit> data) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(data);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private Map<K, LFUUnit<V>> convertToMap(byte[] rawData) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(rawData);
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        return (Map<K, LFUUnit<V>>) objectInputStream.readObject();
+    }
+
     public Map<K, LFUUnit<V>> read() {
         try {
             byte[] rawData = this.readFile();
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(rawData);
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            return (Map<K, LFUUnit<V>>) objectInputStream.readObject();
+            return this.convertToMap(rawData);
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -37,10 +48,7 @@ public class LFUFileStrategy<K, V> {
 
     public void write(Map data) {
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(data);
-            byte[] rawData = byteArrayOutputStream.toByteArray();
+            byte[] rawData = this.convertToByteArray(data);
             this.writeFile(rawData);
         } catch (IOException e) {
             throw new RuntimeException(e);
