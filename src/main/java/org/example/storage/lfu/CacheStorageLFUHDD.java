@@ -1,19 +1,19 @@
 package org.example.storage.lfu;
 
-import org.example.storage.CacheStorageInterface;
-import org.example.storage.params.CacheStorageStrategy;
+import org.example.storage.CacheStorage;
+import org.example.storage.params.Strategy;
 import org.example.storage.utils.FileManagerByStrategy;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class CacheStorageLFUHDD<K, V> implements CacheStorageInterface<K, V> {
+public class CacheStorageLFUHDD<K, V> implements CacheStorage<K, V> {
 
     private final String filePath = "cacheStorageDump.bin";
     private final int maxSize = 10;
 
     private final FileManagerByStrategy fileManager = FileManagerByStrategy.builder()
-            .strategy(CacheStorageStrategy.LFU)
+            .strategy(Strategy.LFU)
             .filePath(this.filePath)
             .build();
 

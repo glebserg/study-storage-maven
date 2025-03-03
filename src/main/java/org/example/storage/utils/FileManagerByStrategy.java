@@ -3,13 +3,13 @@ package org.example.storage.utils;
 import java.util.Map;
 import lombok.Builder;
 import lombok.NonNull;
-import org.example.storage.params.CacheStorageStrategy;
+import org.example.storage.params.Strategy;
 
 
 @Builder
 public class FileManagerByStrategy {
     @NonNull
-    private CacheStorageStrategy strategy;
+    private Strategy strategy;
 
     @NonNull
     private String filePath;

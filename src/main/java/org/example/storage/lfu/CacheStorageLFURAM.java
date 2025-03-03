@@ -1,12 +1,12 @@
 package org.example.storage.lfu;
 
-import org.example.storage.CacheStorageInterface;
+import org.example.storage.CacheStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CacheStorageLFURAM<K, V> implements CacheStorageInterface<K, V> {
+public class CacheStorageLFURAM<K, V> implements CacheStorage<K, V> {
 
     private final int maxSize = 10;
     private final Map<K, LFUUnit<V>> data = new HashMap<>();

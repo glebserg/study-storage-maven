@@ -1,6 +1,6 @@
 package org.example.storage.params;
 
-public enum CacheStorageLocation {
+public enum Location {
     RAM,
     HDD
 }
