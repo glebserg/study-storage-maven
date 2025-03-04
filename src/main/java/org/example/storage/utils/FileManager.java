@@ -2,14 +2,14 @@ package org.example.storage.utils;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.example.storage.lfu.LFUUnit;
+import org.example.storage.Unit;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Map;
 
 @Builder
-public class LFUFileStrategy<K, V> {
+public class FileManager<K, U extends Unit> {
 
     @NonNull
     String filePath;
@@ -24,20 +24,20 @@ public class LFUFileStrategy<K, V> {
         fileOutputStream.write(rawData);
     }
 
-    private byte[] convertToByteArray(Map<K, LFUUnit> data) throws IOException {
+    private byte[] convertToByteArray(Map<K, U> data) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(data);
         return byteArrayOutputStream.toByteArray();
     }
 
-    private Map<K, LFUUnit<V>> convertToMap(byte[] rawData) throws IOException, ClassNotFoundException {
+    private Map<K, U> convertToMap(byte[] rawData) throws IOException, ClassNotFoundException {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(rawData);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        return (Map<K, LFUUnit<V>>) objectInputStream.readObject();
+        return (Map<K, U>) objectInputStream.readObject();
     }
 
-    public Map<K, LFUUnit<V>> read() {
+    public Map<K, U> read() {
         try {
             byte[] rawData = this.readFile();
             return this.convertToMap(rawData);

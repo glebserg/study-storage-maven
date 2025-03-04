@@ -1,26 +1,24 @@
 package org.example.storage.lfu;
 
 import org.example.storage.CacheStorage;
-import org.example.storage.params.Strategy;
-import org.example.storage.utils.FileManagerByStrategy;
+import org.example.storage.utils.FileManager;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class CacheStorageLFUHDD<K, V> implements CacheStorage<K, V> {
+public class HDDStorage<K, V> implements CacheStorage<K, V> {
 
     private final String filePath = "cacheStorageDump.bin";
     private final int maxSize = 10;
 
-    private final FileManagerByStrategy fileManager = FileManagerByStrategy.builder()
-            .strategy(Strategy.LFU)
+    private final FileManager<K, LFUUnit> fileManager = FileManager.<K,LFUUnit>builder()
             .filePath(this.filePath)
             .build();
 
 
     @Override
     public void put(K key, V value) {
-        Map<K, LFUUnit<V>> data = this.fileManager.read();
+        Map<K, LFUUnit> data = this.fileManager.read();
         if (data.size() >= this.maxSize) {
             data.entrySet().stream()
                     .min((unit1, unit2) -> unit1.getValue().getCount().compareTo(unit2.getValue().getCount()))
@@ -34,7 +32,7 @@ public class CacheStorageLFUHDD<K, V> implements CacheStorage<K, V> {
 
     @Override
     public V get(K key) {
-        Map<K, LFUUnit<V>> data = this.fileManager.read();
+        Map<K, LFUUnit> data = this.fileManager.read();
         LFUUnit<V> result = data.get(key);
         if (result != null) {
             result.setCount(result.getCount() + 1);
@@ -46,21 +44,21 @@ public class CacheStorageLFUHDD<K, V> implements CacheStorage<K, V> {
 
     @Override
     public void remove(K key) {
-        Map<K, LFUUnit<V>> data = this.fileManager.read();
+        Map<K, LFUUnit> data = this.fileManager.read();
         data.remove(key);
         this.fileManager.write(data);
     }
 
     @Override
     public void clear() {
-        Map<K, LFUUnit<V>> data = this.fileManager.read();
+        Map<K, LFUUnit> data = this.fileManager.read();
         data.clear();
         this.fileManager.write(data);
     }
 
     @Override
     public ArrayList<K> getKeys() {
-        Map<K, LFUUnit<V>> data = this.fileManager.read();
+        Map<K, LFUUnit> data = this.fileManager.read();
         return new ArrayList<>(data.keySet());
     }
 }

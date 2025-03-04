@@ -3,13 +3,13 @@ package org.example.storage.lfu;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.storage.Unit;
 
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Builder
-public class LFUUnit<V> implements Serializable {
+public class LFUUnit<V> implements Unit<V>{
     private V value;
     private Integer count;
 

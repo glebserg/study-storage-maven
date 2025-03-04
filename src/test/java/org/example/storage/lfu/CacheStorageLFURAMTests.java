@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CacheStorageLFURAMTests {
 
-    private CacheStorageLFURAM<String, String> cache;
+    private RAMStorage<String, String> cache;
 
     @BeforeEach
     void setUp() {
-        cache = new CacheStorageLFURAM<>();
+        cache = new RAMStorage<>();
     }
 
     @Test

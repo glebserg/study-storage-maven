@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CacheStorageLFUHDDTests {
 
-    private CacheStorageLFUHDD<String, String> cache;
+    private HDDStorage<String, String> cache;
 
     @BeforeEach
     void setUp() {
-        cache = new CacheStorageLFUHDD<>();
+        cache = new HDDStorage<>();
     }
 
     @Test
