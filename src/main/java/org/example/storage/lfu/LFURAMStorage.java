@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RAMStorage<K, V> implements CacheStorage<K, V> {
+public class LFURAMStorage<K, V> implements CacheStorage<K, V> {
 
     private final int maxSize = 10;
     private final Map<K, LFUUnit<V>> data = new HashMap<>();

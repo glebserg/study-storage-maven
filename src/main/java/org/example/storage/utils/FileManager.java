@@ -2,26 +2,27 @@ package org.example.storage.utils;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.example.storage.Unit;
+import org.example.storage.CacheStorageUnit;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Map;
 
 @Builder
-public class FileManager<K, U extends Unit> {
+public class FileManager<K, U extends CacheStorageUnit> {
 
     @NonNull
-    String filePath;
+    private String filePath;
 
     private byte[] readFile() throws IOException {
-        File file = new File(filePath);
+        File file = new File(this.filePath);
         return Files.readAllBytes(file.toPath());
     }
 
     private void writeFile(byte[] rawData) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-        fileOutputStream.write(rawData);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(this.filePath)) {
+            fileOutputStream.write(rawData);
+        }
     }
 
     private byte[] convertToByteArray(Map<K, U> data) throws IOException {

@@ -6,7 +6,7 @@ import org.example.storage.utils.FileManager;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class HDDStorage<K, V> implements CacheStorage<K, V> {
+public class LFUHDDStorage<K, V> implements CacheStorage<K, V> {
 
     private final String filePath = "cacheStorageDump.bin";
     private final int maxSize = 10;
