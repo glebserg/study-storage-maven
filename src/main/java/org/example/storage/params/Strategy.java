@@ -1,5 +1,5 @@
 package org.example.storage.params;
 
-public enum CacheStorageStrategy {
+public enum Strategy {
     LFU
 }
